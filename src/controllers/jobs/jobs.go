@@ -3,9 +3,7 @@ package controllers
 import (
 	"danspro/constant"
 	"danspro/src/helpers"
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -16,14 +14,14 @@ import (
 )
 
 func (o ControllerStructure) ControllerGetJobsList(w http.ResponseWriter, req *http.Request) {
-	var bodyReq ControllerGetJobsReq
+	// var bodyReq ControllerGetJobsReq
 	res := helpers.Response{}
-	err := json.NewDecoder(req.Body).Decode(&bodyReq)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		log.Fatalln(err)
-		return
-	}
+	// err := json.NewDecoder(req.Body).Decode(&bodyReq)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	log.Fatalln(err)
+	// 	return
+	// }
 
 	tokenJwt, err := req.Cookie("token")
 	if err != nil {
@@ -56,10 +54,11 @@ func (o ControllerStructure) ControllerGetJobsList(w http.ResponseWriter, req *h
 		res.Reply(w)
 		return
 	}
-	description := bodyReq.Description
-	location := bodyReq.Location
-	fulltime := bodyReq.FullTime
-	paging := bodyReq.Pagination
+	description := req.URL.Query().Get("description")
+	location := req.URL.Query().Get("location")
+	fulltime := req.URL.Query().Get("full_time")
+	paging := req.URL.Query().Get("page")
+	fmt.Println(description)
 	URL := os.Getenv("DATADANS")
 	searchLocation := ""
 	searchFullTime := ""
